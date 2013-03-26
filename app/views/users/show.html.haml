@@ -12,7 +12,7 @@
   .row-fluid
     %h3
       Routines Built
-    %table
+    -#%table
       %tr
         %th Title
         %th Downloads
@@ -28,7 +28,6 @@
   .row-fluid
     %h3.clearfix
       Routines Used
-    -p @user.routines_used
     -@routines =  Routine.find(@user.routines_used)
     =render 'routines/routines' 
   -#.row-fluid
