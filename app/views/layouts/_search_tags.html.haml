@@ -7,7 +7,7 @@
     .span12
       .span5
         %input{:id => "token-input-side", :type => "text", :name => "tokens"} 
-.row-fluid{:style => "height:50px;"}
+.row-fluid{:style => "height:170px;"}
   -Tag.all.each do |tag|
     %a{:href => "/filtered?tokens=#{tag.id}"}
       %span.badge.badge-warning.pull-left{:style => "margin:5px;padding:5px;"}= tag.name
