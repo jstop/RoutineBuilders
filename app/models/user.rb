@@ -3,11 +3,18 @@ class User
   rolify
   include Mongoid::Timestamps
 
+  #My changes
+  has_many :routines
+  has_many :comments, dependent: :destroy
+  embeds_many :records  
+  after_create :default_role
+
   # Include default devise modules. Others available are:
   # :token_authenticatable, :confirmable,
   # :lockable, :timeoutable and :omniauthable
   devise :database_authenticatable, :registerable,
-         :recoverable, :rememberable, :trackable, :validatable
+         :recoverable, :rememberable, :trackable, :validatable,
+         :confirmable
 
   ## Database authenticatable
   field :email,              :type => String, :default => ""
@@ -31,22 +38,31 @@ class User
   field :last_sign_in_ip,    :type => String
 
   ## Confirmable
-  # field :confirmation_token,   :type => String
-  # field :confirmed_at,         :type => Time
-  # field :confirmation_sent_at, :type => Time
-  # field :unconfirmed_email,    :type => String # Only if using reconfirmable
+   field :confirmation_token,   :type => String
+   field :confirmed_at,         :type => Time
+   field :confirmation_sent_at, :type => Time
+   field :unconfirmed_email,    :type => String # Only if using reconfirmable
 
   ## Lockable
   # field :failed_attempts, :type => Integer, :default => 0 # Only if lock strategy is :failed_attempts
   # field :unlock_token,    :type => String # Only if unlock strategy is :email or :both
   # field :locked_at,       :type => Time
 
+  ## Routine
+  field :routines_used, type: Array, :default => []
   ## Token authenticatable
   # field :authentication_token, :type => String
   # run 'rake db:mongoid:create_indexes' to create indexes
   index({ email: 1 }, { unique: true, background: true })
   field :name, :type => String
+  field :about, :type => String, :default => "Use this area to tell us about your goals and how you plan to achieve them."
   validates_presence_of :name
   attr_accessible :role_ids, :as => :admin
-  attr_accessible :name, :email, :password, :password_confirmation, :remember_me, :created_at, :updated_at
+  attr_accessible :name, :email, :password, :password_confirmation, :remember_me, :created_at, :updated_at, :routines_used
+
+  private
+    def default_role
+      self.roles << Role.where(:name => 'user').first
+      puts 'role set'
+    end
 end

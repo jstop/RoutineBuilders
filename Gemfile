@@ -1,5 +1,7 @@
 source 'https://rubygems.org'
+ruby '1.9.3'
 gem 'rails', '3.2.11'
+gem 'thin', :group => :production
 group :assets do
   gem 'sass-rails',   '~> 3.2.3'
   gem 'coffee-rails', '~> 3.2.1'
@@ -26,3 +28,12 @@ gem "figaro", ">= 0.5.3"
 gem "better_errors", ">= 0.3.2", :group => :development
 gem "binding_of_caller", ">= 0.6.8", :group => :development
 gem "hub", ">= 1.10.2", :require => nil, :group => [:development]
+gem "font-awesome-rails"
+#gem "mongoid-paperclip", :require => "mongoid_paperclip"
+#gem "aws-sdk"
+#gem "s3"
+#gem 'carrierwave-mongoid', :require => 'carrierwave/mongoid'
+gem "fog", "~> 1.3.1"
+gem "ri_cal"
+gem "heroku"
+#gem "select2-rails"

@@ -1,5 +1,38 @@
-%h3 User
-%p
-  User: #{@user.name}
-%p
-  Email: #{@user.email if @user.email}
+.container
+  .hero-unit
+    .row-fluid
+      %h1.span5 
+        =@user.name 
+    .row-fluid
+      %p.lead
+        =@user.about
+  -#%p
+    Email: #{@user.email if @user.email}
+  .row-fluid
+    %h3
+      Routines Built
+    -#%table
+      %tr
+        %th Title
+        %th Downloads
+        %th
+      -@user.routines.each do |routine|
+        %tr
+          %td= routine.title
+          %td= routine.download_count
+          %td= link_to 'Delete', routine, method: :delete, data: {confirm: 'Are you sure?'}
+
+    -@routines = @user.routines
+    =render 'routines/routines'
+  .row-fluid
+    %h3.clearfix
+      Routines Used
+    -p @user.routines_used
+    -@routines =  Routine.find(@user.routines_used)
+    =render 'routines/routines' 
+  -#.row-fluid
+    %h3
+      Records
+      -@user.records.each do |record|
+        %p
+          =record.to_json

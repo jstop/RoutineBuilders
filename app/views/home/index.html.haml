@@ -1,4 +1,123 @@
-%h3 Home
-- @users.each do |user|
-  %p
-    User: #{link_to user.name, user}
+.container
+  -#.row.well{style: "text-align:center;background-color:#80bfff;color:#fff;padding-bottom:0px;"}
+  .row-fluid
+    .hero-unit{style: "text-align:center;padding:25px;background-color:#80bfff;color:#fff;"}
+      %h2{style: "margin-top:0px"}
+        Build Your DAMN Schedule
+      %h1{style: "font-size:35px;font-weight:400;"}
+        Do &amp; Achieve More Now!
+  .row-fluid{style: "margin-top:20px;text-align:center;color:#666;"}
+    .span4
+      %div
+        .row-fluid
+          %a.btn.btn-large.btn-primary.span12{href: "/routines"}
+            Browse 
+        %br
+      =render 'layouts/search_tags'
+      %div{style: "margin-bottom:20px"}
+        =image_tag "pinit.jpeg"
+      .row-fluid
+        .btn.btn-large.btn-danger.span12
+          Share Ideas
+    %a{href: "/routines/#{@routine.id}"}
+      :css
+        .routine{
+          margin-top: 5%;
+          position:relative;
+          left: 15%;
+        }
+      =render 'routines/routine'
+    :javascript
+      options = {};
+      options['content'] = "#{@routine.purpose.squish}"
+      options['animation'] = true;
+      options['placement'] = 'right';
+      options['trigger'] = "hover";
+      $(".routine_view").popover(options);
+    .span4.offset1
+      -#{style: "font-family:'Anton', Georgia, 'Times New Roman', sans-serif;font-weight: normal;font-size: 2.0em;letter-spacing: .2em;line-height: 1.6em;text-align: center;text-transform: uppercase;"}
+      .row
+        .btn.btn-large.btn-info.span12
+          Routines 
+      .row{style: "margin-top:30px"}
+        =image_tag "calendars.png"
+      .row{style:"margin: 17px 0px"}
+        =image_tag "message.jpg"
+      .row
+        .btn.btn-large.btn-success.span12
+          Get Reminders
+  .row-fluid
+    %br
+    %a{href: '#info'}
+      How to configure your calendar and smartphone for reminders
+  %a#info
+  %hr
+  .well
+    .row-fluid
+      %h2.pull-left{style: "margin-left:20px"}
+        How to use RoutineBuilders with google calendar 
+    %br
+    .row-fluid
+      %h1
+        Reminders
+    %br
+    .row-fluid
+      .lead
+        Configure your phone to use 
+        %a{href: "http://www.google.com/mobile/sms/calendar/", target: "_blank"}
+          google calendar sms 
+        by registering your mobile phone at
+        %a{href: "http://google.com/calendar", target: "_blank"}
+          google.com/calendar 
+        and completing Settings > Mobile Setup.
+      .lead You will then be able to  receive text message notifications for the events on your calendar.
+    %br
+    %br
+    %br
+    %br
+    .row-fluid
+      %h1.span2.offset1 
+        Why?
+      .lead.span8.offset1
+        Text message reminders are the "Now" in Do and Achieve More Now! They let you know what you have to do when the time is now.
+    %br
+    %br
+    %br
+    .row-fluid
+      %h1 Then
+    .row-fluid
+      .span6
+        %br
+        %br
+        %br
+        %br
+        %br
+        %br
+        .row-fluid
+          .lead.span10.offset1 1. Download your customized routine and import it to your calendar. 
+        %br
+        %br
+        %br
+        %br
+        %br
+        %br
+        .row-fluid
+          =image_tag "Drag_n_Drop.jpg"
+      .span6
+        .row-fluid
+          =image_tag "import.jpg"
+        %br
+        %br
+        %br
+        .row-fluid
+          .lead.span10.offset1 2. To Import - Drag and drop the file Routinebuilders.ics into the import window
+    %br
+    %br
+    %br
+    .row-fluid
+      .lead.span6.offset2 
+        3. DO AND ACHIEVE MORE...NOW!
+      %a{href: "/users/sign_up"}
+        .offset1.btn.btn-large.btn-primary
+          Sign Up!
+

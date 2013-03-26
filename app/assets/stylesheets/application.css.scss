@@ -9,17 +9,87 @@
  * compiled file, but it's generally better to create a new file per style scope.
  *
  *= require_self
+ *= require select2
  *= require_tree .
-*/
+ */
 
-.content {
-  background-color: #eee;
-  padding: 20px;
-  margin: 0 -20px; /* negative indent the amount of the padding to maintain the grid system */
-  -webkit-border-radius: 0 0 6px 6px;
-  -moz-border-radius: 0 0 6px 6px;
-  border-radius: 0 0 6px 6px;
-  -webkit-box-shadow: 0 1px 2px rgba(0,0,0,.15);
-  -moz-box-shadow: 0 1px 2px rgba(0,0,0,.15);
-  box-shadow: 0 1px 2px rgba(0,0,0,.15);
+@import "bootstrap";
+body { padding-top: 50px; }
+@import "bootstrap-responsive";
+@import "font-awesome";
+@import url(http://fonts.googleapis.com/css?family=Anton);
+@import url(http://fonts.googleapis.com/css?family=Chango);
+@import url(http://fonts.googleapis.com/css?family=Passion+One);
+#myForm .btn{
+  padding: 5px 10px;
+}
+.card {
+  text-decoration: none;
+  margin-top: 0px;
+  margin-bottom: 40px;
+  height:510px;
+  text-decoration:none;
+  text-align:left;
+  padding:17px
+}
+.card-inner {
+  height:510px;
+}
+.card img{
+  height: 204px;
+  width: 290px;
+}
+.card h1 {
+  font-size: 15px;
+  font-weight: bold;
+  color: white;
+  margin:0px;
+}
+.btn-card{
+  padding:0px;
+}
+.card hr{
+  margin: 5px 20px;
+}
+
+.navbar i{
+  font-size:56px;
+}
+.nb-leftnav a{
+  height:90px;
+  padding:20px;
+  margin-left:0px;
+}
+.nb-leftnav div{
+  margin-top:0px;
+  height:60px;
+}
+.nvbar li:hover{
+  color:#06c;
+  background-color:white;
+}
+
+ul.sidebar-nav-fixed {
+  text-align:center;
+  position:fixed;
+}
+
+@media (max-width: 767px) {
+  .sidebar-nav-fixed {
+    width:auto;
+  }
+}
+
+@media (max-width: 979px) {
+  .sidebar-nav-fixed {
+    position:static;
+    width: auto;
+  }
+}
+.comment{
+  font-size: 20px;
+}
+.comment .btn a:hover{
+  text-decoration:none;
+  color:black;
 }
