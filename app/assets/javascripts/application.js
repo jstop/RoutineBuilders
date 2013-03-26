@@ -12,7 +12,6 @@
 //
 //= require jquery
 //= require jquery_ujs
-//= require select2
 //= require bootstrap
 //= require_tree .
 //
@@ -25,7 +24,8 @@ $(document).ready(function () {
   });
 });
 
-$(document).ajaxError(function(event, request) {
+/*$(document).ajaxError(function(event, request) {
   var msg = request.getResponseHeader('X-Message');
   if (msg) alert(msg);
 });
+*/
