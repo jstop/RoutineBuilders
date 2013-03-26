@@ -54,6 +54,7 @@ class User
   # field :authentication_token, :type => String
   # run 'rake db:mongoid:create_indexes' to create indexes
   index({ email: 1 }, { unique: true, background: true })
+  index({ name: 1 }, { unique: true, background: true })
   field :name, :type => String
   field :about, :type => String, :default => "Use this area to tell us about your goals and how you plan to achieve them."
   validates_presence_of :name
