@@ -1,0 +1,9 @@
+= simple_form_for(@comment) do |f|
+  = f.error_notification
+  = f.hidden_field :routine_id
+
+  .form-inputs
+    = f.input :body, as: :text, input_html: {placeholder: "Comment", rows: 5, class: "span12"}
+
+  .form-actions
+    = f.button :submit

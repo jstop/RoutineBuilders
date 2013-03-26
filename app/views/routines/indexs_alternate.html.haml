@@ -1,0 +1,70 @@
+-@routines.each_slice(3) do |row|
+  .row-fluid{:style => "margin-top:15px"}
+    -row.each_with_index do |routine, i|
+      %a.span4{:id => "routine_#{routine._id}", :style => "text-decoration:none;text-align:left;padding:17px", :href => "/routines/#{routine.id}", "data-content" => routine.purpose}
+        .well
+          %p{:style => "text-align:center;font-size:18px; font-weight:bold;"}
+            =routine.title
+          .row
+            -5.times do
+              -routine.tags.each do |tag|
+                .badge.badge-success.pull-right{style: "margin:1px;"}=tag
+
+                -#.label.pull-right{style: "margin:1px;"}=tag
+          %span.card-image{:style => "text-align:center;height:204px;"}
+            -if i==0
+              =image_tag "Education.jpeg"
+            -elsif i==1
+              =image_tag "Abs.jpeg"
+            -else
+              =image_tag "Waikru.jpeg"
+          .lead
+            .row
+              %br
+            .row
+              %strong.offset1
+                -if (routine.total_time_hours != 0) 
+                  #{routine.total_time_hours} Hours 
+                -if routine.total_time_minutes != 0
+                  #{routine.total_time_minutes} Minutes
+            .row
+              .span3.offset1 
+                over 
+              %strong.span8
+                =routine.weeks
+                Weeks 
+            .row
+              .span3.offset1 
+                doing 
+              %strong.span8
+                -if routine.hours != 0
+                  =routine.hours 
+                  Hours
+                -if routine.minutes != 0
+                  =routine.minutes 
+                  Minutes 
+            %br
+            -routine.days.each do |day|
+              %span.badge.badge-important{:style => "font-size:16px;"}= day
+              -#%span.label.label-warning{:style => "font-size:16px;"}= day
+            -#%img{:src => "/images/3.5-stars.jpg"}
+            -#%p{:style => "height:70px"}
+              %small
+                %strong
+                  Purpose:
+                =routine.purpose.truncate(165, :seperatot => ' ')
+          .row{:style => "margin:0px;clear:both;"}
+            -routine.tags.each do |tag|
+              %span{:class => "badge badge-info pull-right"}
+          %p{:style => "font-size:14px; font-weight:bold;"}
+            Score: X
+      :javascript
+        options = {};
+        options['title'] = "Title";
+        /*options['content'] = "#{routine.purpose.gsub("\"" ,"")}";*/
+        options['trigger'] = "hover";
+        $("#routine_#{routine._id}").popover(options);
+        
+%br
+= link_to 'New Routine', new_routine_path
+

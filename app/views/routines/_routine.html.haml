@@ -1,0 +1,60 @@
+.span3
+  .routine
+    .row-fluid
+      =image_tag @routine.image_name
+    .routine_view{style: "color:white;background-color:#0072e6;padding:10px;"}
+      .row-fluid{style: "text-align:center;font-family: Arial, Helvetica, sans-serif;font-size:22px;line-height:24px;"}
+        =@routine.title
+      .row-fluid{style: "font-family: Arial, Helvetica, sans-serif;font-size:22px;margin-top:10px;line-height:22px;"}
+        %strong
+          =pluralize(@routine.weeks, 'Week') 
+        %br
+        %strong
+          -if @routine.hours != 0
+            =pluralize(@routine.hours, 'Hr') 
+          -if @routine.minutes != 0
+            =pluralize(@routine.minutes, 'Min') 
+          ='/day'
+        %br
+      .row-fluid{style: "font-family: Arial, Helvetica, sans-serif;font-size:22px;margin-top:10px;line-height:32px;"}
+        Recomended for
+        %br
+        %strong
+          =@routine.days.count
+          Days/Week
+      %hr
+      .row-fluid
+        %form{ action: '/build_routine', method: 'get', id: "myForm", style: "margin-top:0px;"}
+          .row-fluid 
+            1 - Select Days
+            .btn-group{"data-toggle" => "buttons-checkbox"}
+              -Routine::DAYS.each do |day|
+                %button.btn.btn-success{type: "button", name:"days[]", value: day}=day[0,1]
+            .row
+              %br
+            2 - Select Date &amp; Time
+          #datetimepicker1.input-append
+            %input{:style => "width:75%;","data-format" => "MM/dd/yyyy HH:mm PP", :type => "text", :value => @default_start_date, :name => "start_date"}
+            %span.add-on
+              %i{style:"color:#0072e6;", "data-date-icon" => "icon-calendar", "data-time-icon" => "icon-time"}
+
+          :javascript
+            $('#datetimepicker1').datetimepicker({
+              language: 'en',
+              format: "MM/dd/yyyy HH:mm PP",
+              pick12HourFormat: true,
+              pickSeconds: false
+            });
+          %input{:type => 'hidden', :name => 'id', :value => @routine.id}
+          and
+          %input.btn.btn-large.btn-warning.span12{:style => "margin-top:0px;", :type => 'submit', :value => 'Download Routine'}
+        :javascript
+          $('#myForm').submit(function() {
+              $('#myForm .btn.active').each(function() {
+                   var input = document.createElement("input");
+                   input.setAttribute("type", "hidden");
+                   input.setAttribute("name", this.name);
+                   input.setAttribute("value", this.value);
+                   document.getElementById("myForm").appendChild(input);
+               });
+          }); 

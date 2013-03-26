@@ -1,0 +1,14 @@
+%form#RoutineForm{:style => "margin:0px", :action => "/filtered", :method => "get"}
+  .row-fluid
+    %h2.pull-left{style: "color:#666;"}
+      categories
+    %input.btn.pull-left{:style => "margin-left:10px;margin-top:10px;", :type => "submit", :value => "Search"}
+  .row-fluid
+    .span12
+      .span5
+        %input{:id => "token-input-side", :type => "text", :name => "tokens"} 
+.row-fluid{:style => "height:50px;"}
+  -Tag.all.each do |tag|
+    %a{:href => "/filtered?tokens=#{tag.id}"}
+      %span.badge.badge-warning.pull-left{:style => "margin:5px;padding:5px;"}= tag.name
+

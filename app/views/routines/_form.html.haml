@@ -1,0 +1,151 @@
+.hero-unit
+  = simple_form_for(@routine, :html => {:class => 'form-vertical myForm' }) do |f|
+    = f.error_notification
+
+    %fieldset
+      %div.row
+        .span4
+          .lead
+            Info
+          = f.input :title, input_html: {placeholder: "Title",class: 'input span11'}
+          = f.input :purpose, as: :text, input_html: {placeholder: "Purpose", rows: "5", class: "span11"}
+          = f.input :resources, as: :text, input_html: {placeholder: "Resources", rows: "5", class: "span11"}
+          %br/
+        .span4
+          .row-fluid
+            .lead.span3.offset1
+              Schedule
+          .row
+            =f.input :weeks, collection: [1,2,3,4,5,6,7,8], input_html: {class: "span3"}
+          .row
+            =f.input :minutes, collection: [0,5,10,15,20,25,30,35,40,45,50,55], input_html: {class: "span3"}
+          .row
+            =f.input :hours, collection: [0,1,2,3,4], input_html: {class: "span3"}
+          .row{style: "margin-top:5px"}
+            .lead{style: "margin-bottom:0px"}
+              Default Days:
+          .row{style: "margin-top:5px"}
+            .btn-group{"data-toggle" => "buttons-checkbox"}
+              -Routine::DAYS.each do |day|
+                -if @routine.days.include? day
+                  %button.btn.btn-primary.active{type: "button", name:"routine[days][]", value: day}=day[0,1]
+                -else
+                  %button.btn.btn-primary{type: "button", name:"routine[days][]", value: day}=day[0,1]
+                  
+            :javascript
+              $('#new_routine').submit(function() {
+                  $('#new_routine .btn.active').each(function() {
+                       var input = document.createElement("input");
+                       input.setAttribute("type", "hidden");
+                       input.setAttribute("name", this.name);
+                       input.setAttribute("value", this.value);
+                       document.getElementById("new_routine").appendChild(input);
+                   });
+              }); 
+            :javascript
+              $("#edit_routine_#{@routine.id}").submit(function() {
+                $("#edit_routine_#{@routine.id} .btn.active").each(function() {
+                     var input = document.createElement("input");
+                     input.setAttribute("type", "hidden");
+                     input.setAttribute("name", this.name);
+                     input.setAttribute("value", this.value);
+                     document.getElementById("edit_routine_#{@routine.id}").appendChild(input);
+                 });
+              }); 
+            -#Routine::DAYS.each do |day|
+              %label.checkbox.inline
+                =check_box_tag "routine[days][]", day, @routine.days.include?(day) 
+                =day[0,1]
+          .row{style: "margin-top:15px"}
+            .lead{:style => "margin-bottom:5px"}
+              Default Start Time:
+            .offset1
+              #datetimepicker3.input-append
+                %input.span6{"data-format" => "HH:mm PP", :type => "text", :name => "routine[start_time]", :value => "02:00 PM"}
+                %span.add-on
+                  %i{"data-date-icon" => "icon-calendar", "data-time-icon" => "icon-time"}
+              :javascript
+                $('#datetimepicker3').datetimepicker({
+                  language: 'en',
+                  pick12HourFormat: true,
+                  pickDate: false
+                });
+        .span4
+          .row-fluid
+            .offset1.span11
+              .lead
+                Categories
+              .row
+                =f.input :public, as: :boolean
+              .row
+                %label.radio
+                  %input{type: "radio", name: "routine[image]", value: "category_1" , checked: "true"}
+                  General
+                %label.radio
+                  %input{type: "radio", name: "routine[image]", value: "category_2", checked: @routine.image=="category_2" }
+                  Fitness
+                %label.radio
+                  %input{type: "radio", name: "routine[image]", value: "category_3", checked: @routine.image=="category_3" }
+                  Education
+              .row{style: "margin-top:45px"}
+                .lead{style: "margin-bottom:5px"}
+                  Add Tags
+                  %a{"data-toggle" => "modal", :href => "#myModal", :role => "button"}
+                    %i.icon-plus
+                  %span.result.badge.badge-success
+                  %input{id: "token-input", type: "text", name: "tokens"} 
+                  -@tags = []
+                  -@routine.tags.each do |tag|
+                    -@tags << {id: Tag.where({name: tag}).first.id, name: tag}
+                  :javascript
+                    $(document).ready(function () {
+                      $("#token-input").tokenInput("/tags.json",{
+                        prePopulate: #{@tags.to_json}
+                      });
+                    });
+              .row
+                %input.btn.btn-primary.btn-large.span6{:style => "margin-top:20px", :type => "submit", :value => "Build"}
+                  -#@tags = Tag.all(name: @routine.tags).to_json.gsub "_id", "id"
+#myModal.modal.hide.fade{"aria-hidden" => "true", "aria-labelledby" => "myModalLabel", :role => "dialog", :tabindex => "-1"}
+  .modal-header
+    %button.close{"aria-hidden" => "true", "data-dismiss" => "modal", :type => "button"} ×
+    %h3#myModalLabel Add a Tag
+  -@tag = Tag.new
+  %form{action: '/tags', method: 'POST', remote: true,  id: 'new_tag'}
+    .row-fluid
+      %label.offset1 
+        Tag
+        %input{name: 'tag[name]',id: 'modal_tag_input', type: 'text'}
+  :javascript
+    $(document).ready(function(){
+      $('#add_tag').click(function(){
+        console.log($('#new_tag').serialize());
+        $.ajax({
+          type: "POST",
+          url: '/tags',
+          data: $('#new_tag').serialize(),
+          success: function(){
+            tag = $('#modal_tag_input').val();
+            $(".result").text(tag)
+            $(".result").show()
+            console.log('success')
+          },
+          error: function(){
+            $(".result").text('error')
+            $(".result").show()
+            console.log('error')
+          },
+          complete: function(){
+            console.log('complete')
+            $('#myModal').modal("hide");
+            /*$('#content').load('/' + routine_id, function(){
+              addEditPageModals();
+            });*/
+          }
+        });
+      });
+    });
+      
+  .modal-footer
+    %button.btn{"aria-hidden" => "true", "data-dismiss" => "modal"} Close
+    %button.btn.btn-primary{id:'add_tag'} Add Tag

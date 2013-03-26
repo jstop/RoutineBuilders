@@ -1,0 +1,14 @@
+BEGIN:VCALENDAR
+PRODID;X-RICAL-TZSOURCE=TZINFO:-//com.denhaven2/NONSGML ri_cal gem//EN
+CALSCALE:GREGORIAN
+VERSION:2.0
+BEGIN:VEVENT
+DURATION:+PT0H5M
+DTSTART;VALUE=DATE-TIME:20130325T140000
+DESCRIPTION:Think about all the thing you do that are bullshit and make a
+  list. That way you can avoid them this week.www.dontbsme.com
+URL:www.dontbsme.com
+SUMMARY:This is bullshit
+RRULE:FREQ=WEEKLY;UNTIL=20130401T140000Z
+END:VEVENT
+END:VCALENDAR

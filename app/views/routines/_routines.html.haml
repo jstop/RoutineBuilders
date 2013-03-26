@@ -1,0 +1,47 @@
+-@routines.each_with_index do |routine, i|
+  %a.pull-left.span4.card{:id => "routine_#{routine._id}", :href => "/routines/#{routine.id}", "data-content" => routine.purpose, style: "margin-left:0px;"}
+    .btn.btn-primary.card-inner{style: "padding:0px;"}
+      %span
+        =image_tag routine.image_name
+      %h1
+        =routine.title
+      %hr{style: "margin:0px 20px"}
+      .lead
+        -#.row
+          %strong
+            -if (routine.total_time_hours != 0) 
+              #{routine.total_time_hours} Hours 
+            -if routine.total_time_minutes != 0
+              #{routine.total_time_minutes} Minutes
+        .row
+          %strong
+            =routine.weeks
+          Weeks 
+        .row
+          -if routine.hours != 0
+            %strong
+              =routine.hours 
+            Hours
+          -if routine.minutes != 0
+            %strong
+              =routine.minutes 
+            Minutes 
+        .row
+          .offset1
+            %strong=routine.days.count
+            Days/Week
+      %p{:style => "font-size:14px; font-weight:bold;"}
+        Score: 
+        = routine.download_count
+      %hr
+      .row-fluid.span11
+        -routine.tags.each do |tag|
+          .badge.badge-warning.pull-left{style: "margin:1px;"}=tag
+  :javascript
+    options = {};
+    /*options['content'] = "#{routine.purpose.gsub("\"" ,"")}";*/
+    options['animation'] = true;
+    options['placement'] = 'bottom';
+    options['trigger'] = "hover";
+    $("#routine_#{routine._id}").popover(options);
+

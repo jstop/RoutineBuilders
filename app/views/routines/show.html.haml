@@ -1,0 +1,62 @@
+.container
+  .row{:style => "margin-top:0px; padding-top:0px;"}
+    .well{style: "text-align:center;background-color:#80bfff; color:#666;"}
+      %strong{style: "font-size:20px"}
+        Download &amp; Import Calendars 
+        %br
+        -#Use your favorite calendar app
+      -#%h4
+        =@routine.download_count
+        users have commited to this routine.
+  .row{:style => "margin-top:0px; padding-top:0px;"}
+    =render 'routine'
+    .row.span9
+      .well{style: "padding:10px 30px 30px 30px;"}
+        .row-fluid{style: "margin-bottom:30px"}
+          %h2.pull-left{style: "margin:10px 20px 0px 0px;line-height:30px"}
+            Tags:
+          %div{style: "margin-top:12px;"}
+            -@routine.tags.each do |tag|
+              %span.badge.badge-warning.pull-left{style:"padding:5px;margin:3px;"}= tag
+        .row-fluid
+          .lead{:style => "font-size:18px"}
+            =@routine.purpose
+        .row-fluid{style: "margin-top:20px"}
+          %h2
+            Resources 
+          %a{:href => "http://#{@routine.resources}", target: "_blank"}
+            =@routine.resources
+        %hr
+        .row
+          %a{"data-pin-config" => "none", "data-pin-do" => "buttonBookmark", :href => "//pinterest.com/pin/create/button/"}
+            %img{src: "//assets.pinterest.com/images/pidgets/pin_it_button.png"}/
+          %strong.pull-right{:style => "font-size:30px"}
+            Score: 
+            = @routine.download_count
+      .row-fluid{style: "color: #fff"}
+        -if can? :manage, @routine
+          = link_to 'Edit', edit_routine_path(@routine), class: 'btn btn-danger'
+          = link_to 'Delete', routine_path(@routine), data: { confirm: "Are You Sure?"}, method: :delete, class: 'btn btn-inverse'
+  .row-fluid
+    .span3
+      %span.pull-right{:style => "margin-right:20px"}
+        Built By: 
+        -if @routine.user.nil?
+          unknown
+        -else
+          %a{:href => "/users/#{@routine.user_id}"}=@routine.user.name 
+  .row-fluid
+    %hr.span11{style: "margin-bottom:0px;"}
+  .row-fluid
+    %h3{style: "color:#0072e6;margin-top:0px;margin-bottom:30px;"}
+      Comments
+  -if signed_in?
+    .row-fluid
+      .span6
+        =render 'comments/form'
+  .row-fluid
+    .span12
+      -@routine.comments.each do |comment|
+        -@comment = comment
+        =render 'comment', locals: {comment: @comment}
+  = link_to 'Back', routines_path
