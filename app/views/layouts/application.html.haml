@@ -4,7 +4,7 @@
     %meta{:content => "width=device-width, initial-scale=1.0", :name => "viewport"}
       %title= content_for?(:title) ? yield(:title) : "RoutineBuilders"
       %meta{name: "viewport", content: "width=device-width, initial-scale=1.0"}
-      %meta{:content => content_for?(:description) ? yield(:description) : "RoutineBuilder", :name => "description"}
+      %meta{:name => "Description", :content=> "RoutineBuilders - Do and Achieve More Now. Find and share calendar routines that start on the date and time you want them. Instantly download any of the publicly listed .ics .ical templates. This works on google calendar, icalendar and all other common calendar softwares."}
         = stylesheet_link_tag "application", :media => "all"
         = javascript_include_tag "application"
         = csrf_meta_tags
