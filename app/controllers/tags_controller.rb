@@ -53,6 +53,7 @@ class TagsController < ApplicationController
         format.json { render json: @tag.errors, status: :unprocessable_entity }
       end
     end
+    authorize! :create 
   end
 
   # PUT /tags/1

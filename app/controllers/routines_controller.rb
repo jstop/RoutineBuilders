@@ -2,8 +2,6 @@ class RoutinesController < ApplicationController
   # GET /routines
   # GET /routines.json
   def index
-    puts 'hello'
-    puts ENV['GMAIL_USERNAME']
     @routines = Routine.all.desc(:download_count)
 
     respond_to do |format|
@@ -26,18 +24,13 @@ class RoutinesController < ApplicationController
     end
   end
 
-  def cal
-    send_file icalData, :filename => 'RoutineBuilders.ics'
-    respond_to do |format|
-      format.ics { send_file(icalData, :filename => 'RoutineBuilders.ics')}
-    end
-  end
-
   # GET /routines/1
   # GET /routines/1.json
+  # GET /routines/1.ics
   def show
     @routine = Routine.find(params[:id])
     @comment = Comment.new( routine: @routine)
+    #QUESTION- The following is only used for html format - Can it be made to only run when necesary
     unless @routine.days.first.nil?
       @dayMap = {'SU' => 'Sun', 'MO' => 'Mon', 'TU' => 'Tue', 'WE' => 'Wed', 'TH' => 'Thu', 'FR' => 'Fri', 'SA' => 'Sat'}
       date = Date.parse(@dayMap[@routine.days.first])
@@ -52,6 +45,7 @@ class RoutinesController < ApplicationController
     respond_to do |format|
       format.html # show.html.erb
       format.json { render json: @routine }
+      format.ics { send_data(create_ical_from(@routine, params[:start_date], params[:days]), :filename=>"RoutineBuilders.ics", :disposition=>"inline; filename=RoutineBuilders.ics", :type=>'text/calendar')}
     end
   end
 
@@ -76,7 +70,7 @@ class RoutinesController < ApplicationController
   # POST /routines.json
   def create
     tag_ids = params[:tokens].split(",") #Can i move this logic into the model
-    #how do you handle when user sends non existant tag
+    #how do you handle if user sends non existant tag
     params[:routine][:tags] = []
     tag_ids.each do |tag_id|
       tag = Tag.find(tag_id)
@@ -133,36 +127,6 @@ class RoutinesController < ApplicationController
     end
   end
 
-  def build_routine 
-    routine = Routine.find(params[:id])
-    if signed_in?
-      current_user.records << Record.new(routine_id: routine.id, start_date: params[:start_date])
-      current_user.routines_used << routine.id
-      current_user.save
-      unless routine.used_by.include? current_user.id
-        routine.used_by << current_user.id
-        routine.inc(:download_count, 1)
-        routine.save
-      end
-    end
-    #days =  byday routine.days
-    days = params[:days]
-    start = DateTime.strptime(params[:start_date], '%m/%d/%Y %I:%M %p')
-    calendar = RiCal.Calendar do
-      event do
-        summary routine.title
-        url routine.resources
-        description routine.purpose + routine.resources
-        dtstart     start.with_floating_timezone
-        duration    "+PT#{routine.hours}H#{routine.minutes}M" #get_duration that will create the currect string for building the duration
-        rrule       :freq => "WEEKLY", :until => start + routine.weeks.week, :byday => days
-      end
-    end
-    File.open("public/RoutineBuilders.ics", 'w') {|f| f.write(calendar.to_s) }
-    send_file('public/RoutineBuilders.ics', :type => "text/calendar", :filename => File.basename('RoutineBuilders.ics'))
-  end
-  
-
   protected
 
   def byday(days)
@@ -174,20 +138,33 @@ class RoutinesController < ApplicationController
     bydays
   end
 
-  def icalData
-    the_calendar = RiCal.Calendar do |cal|
-
-      cal.event do |event|
-        event.description = "MA-6 First US Manned Spaceflight"
-        event.dtstart =  DateTime.parse("2/20/1962 14:47:39")
-        event.dtend = DateTime.parse("2/20/1962 19:43:02")
-        event.location = "Cape Canaveral"
-        event.add_attendee "john....@nasa.gov"
-        event.alarm do
-          description "Segment 51"
-        end
+  def create_ical_from(routine, start_date, days)
+    #move this into a function or relocate
+    adjust_records(routine)
+    start = DateTime.strptime(start_date, '%m/%d/%Y %I:%M %p')
+    calendar = RiCal.Calendar do
+      event do
+        summary routine.title
+        url routine.resources
+        description routine.purpose + routine.resources
+        dtstart     start.with_floating_timezone
+        duration    "+PT#{routine.hours}H#{routine.minutes}M" #get_duration that will create the currect string for building the duration
+        rrule       :freq => "WEEKLY", :until => start + routine.weeks.week, :byday => days
       end
     end
-    the_calendar.export
+    calendar.export
+  end
+
+  def adjust_records(routine)
+    if signed_in?
+      current_user.records << Record.new(routine_id: routine.id, start_date: params[:start_date])
+      current_user.routines_used << routine.id
+      current_user.save
+      unless routine.used_by.include? current_user.id
+        routine.used_by << current_user.id
+        routine.inc(:download_count, 1)
+        routine.save
+      end
+    end
   end
 end

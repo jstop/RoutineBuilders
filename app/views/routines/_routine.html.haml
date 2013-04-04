@@ -24,7 +24,8 @@
           Days/Week
       %hr
       .row-fluid
-        %form{ action: '/build_routine', method: 'get', id: "myForm", style: "margin-top:0px;"}
+        -#%form{ action: '/build_routine.ics', method: 'get', id: "myForm", style: "margin-top:0px;"}
+        %form{ action: "/routines/#{@routine.id}.ics", method: 'get', id: "myForm", style: "margin-top:0px;"}
           .row-fluid 
             1 - Select Days
             .btn-group{"data-toggle" => "buttons-checkbox"}

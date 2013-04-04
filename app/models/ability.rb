@@ -13,6 +13,7 @@ class Ability
       can :delete, Comment do |comment|
         comment.try(:user) == user
       end
+      can :create, Tag
     end
     # Define abilities for the passed in user here. For example:
     #
