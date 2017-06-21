@@ -254,6 +254,7 @@ DEPENDENCIES
   jquery-rails
   mongoid (>= 3.0.19)
   mongoid-rspec (>= 1.6.0)
+  moped (= 2.4.2)
   quiet_assets (>= 1.0.1)
   rails (= 3.2.11)
   ri_cal
