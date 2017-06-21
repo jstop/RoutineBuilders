@@ -1,3 +1,5 @@
+RUBY VERSION
+   ruby 1.9.3p551
 GEM
   remote: https://rubygems.org/
   specs:
@@ -228,8 +230,6 @@ GEM
     xpath (1.0.0)
       nokogiri (~> 1.3)
 
-RUBY VERSION
-   ruby 1.9.3p551
 PLATFORMS
   ruby
 
