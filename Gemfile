@@ -1,5 +1,5 @@
 source 'https://rubygems.org'
-ruby '1.9.3p551'
+ruby '2.2.1'
 gem 'rails', '3.2.11'
 gem 'thin', :group => :production
 group :assets do
