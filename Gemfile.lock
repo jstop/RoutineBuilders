@@ -1,5 +1,5 @@
 RUBY VERSION
-   ruby 1.9.3p551
+   ruby 2.2
 GEM
   remote: https://rubygems.org/
   specs:
